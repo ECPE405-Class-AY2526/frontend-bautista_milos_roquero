@@ -32,7 +32,8 @@ cd Client
 npm start
 ```
 
-This will launch the client application in your default web browser, usually at `http://localhost:5000/`.
+This will launch the client application in your default web browser, usually at `http://localhost:3000/`.
+
 
 
 
