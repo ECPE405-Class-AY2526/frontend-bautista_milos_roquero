@@ -18,7 +18,6 @@ First, navigate to the `Server` directory and install the necessary dependencies
 
 ```bash
 cd Server
-npm install
 node server.js
 ```
 
@@ -30,10 +29,10 @@ In a new terminal window, navigate to the `Client` directory and install its dep
 
 ```bash
 cd Client
-npm install
 npm start
 ```
 
 This will launch the client application in your default web browser, usually at `http://localhost:5000/`.
+
 
 
