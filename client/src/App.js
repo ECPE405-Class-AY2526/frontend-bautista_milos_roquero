@@ -5,6 +5,7 @@ import About from "./LandingPage/About";
 import Gallery from "./LandingPage/Gallery";
 import Contact from "./LandingPage/Contact";
 import SignUp from "./LandingPage/SignUp";
+import Login from "./LandingPage/Login";
 
 export default function App(){
   return(
