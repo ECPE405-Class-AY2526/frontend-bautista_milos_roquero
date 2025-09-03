@@ -18,7 +18,7 @@ First, navigate to the `Server` directory and install the necessary dependencies
 
 ```bash
 cd server
-node server.js
+npm run start
 ```
 
 You should see a message in your terminal indicating that the server is running on `http://127.0.0.1:3001/`.
@@ -33,6 +33,7 @@ npm start
 ```
 
 This will launch the client application in your default web browser, usually at `http://localhost:4003/`.
+
 
 
 
