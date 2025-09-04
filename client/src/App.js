@@ -6,6 +6,8 @@ import Gallery from "./LandingPage/Gallery";
 import Contact from "./LandingPage/Contact";
 import SignUp from "./LandingPage/SignUp";
 import Login from "./LandingPage/Login";
+import Dashboard from "./components/Dashboard";
+
 
 export default function App(){
   return(
@@ -15,8 +17,10 @@ export default function App(){
           <Route path ="/about" element={<About/>}/>
           <Route path ="/gallery" element={<Gallery/>}/>
           <Route path ="/contact" element={<Contact/>}/>
-          <Route path ="/signup" element={<SignUp/>}/>
+          <Route path ="/home" element={<Home/>}/>
           <Route path ="/login" element={<Login/>}/>
+          <Route path ="/signup" element={<SignUp/>}/>
+          <Route path ="/Maindashboard" element={<Dashboard/>}/>
         </Routes>    
     </div>
   )
