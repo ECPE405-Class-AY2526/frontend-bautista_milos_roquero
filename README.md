@@ -36,8 +36,9 @@ This will launch the client application in your default web browser, usually at 
 
 
 For the Mobile Application
-  cd "C:\frontend-bautista_milos_roquero\Mobile\MobileAPp" && npx react-native run-android
+  cd "C:\frontend-bautista_milos_roquero\Mobile\MobileApp" && npx react-native run-android
   
+
 
 
 
