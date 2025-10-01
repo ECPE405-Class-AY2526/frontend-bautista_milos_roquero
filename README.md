@@ -35,6 +35,13 @@ npm start
 This will launch the client application in your default web browser, usually at `http://localhost:4003/`.
 
 
+For the Mobile Application
+  cd "C:\frontend-bautista_milos_roquero\Mobile\MobileApp" && npx react-native run-android
+  
+
+
+
+
 
 
 
