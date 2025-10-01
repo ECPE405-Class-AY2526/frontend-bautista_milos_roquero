@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/ECPE405-Class-AY2526/frontend-bautista_milos_roquero/issues"
   },
-  "homepage": "https://github.com/ECPE405-Class-AY2526/frontend-bautista_milos_roquero#readme"
+  "homepage": "https://github.com/ECPE405-Class-AY2526/frontend-bautista_milos_roquero#readme",
+  "dependencies": {
+    "@react-navigation/native": "^7.1.17",
+    "react-navigation": "^5.0.0"
+  }
 }
