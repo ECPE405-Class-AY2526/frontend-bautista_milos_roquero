@@ -1,39 +1,22 @@
-const express = require("express")
-const mongoose = require('mongoose')
-const cors = require("cors")
-const testModel = require('./models/TestUser')
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/auth');
 
+dotenv.config();
 
-const app = express()
-app.use(express.json())
-app.use(cors())
+const app = express();
+app.use(cors());
+app.use(express.json()); // Parse JSON bodies
 
-mongoose.connect("mongodb://127.0.0.1:27017/test-user")
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
 
-app.post('/signup',(req,res)=>{
-    testModel.create(req.body)
-    .then(testUser => res.json(testUser))
-    .catch(err => res.json(err))
-})
+// Routes
+app.use('/api/auth', authRoutes);
 
-app.post('/login', (req, res) => {
-    const {email,password} = req.body;
-    testModel.findOne({email: email})
-    .then(user => {
-        if(user){
-            if(user.password === password){
-                res.json("Success")
-            }
-            else{
-                res.json("Invalid Password")
-            }
-        }
-        else{
-            res.json("No record existed")
-        }
-    })
-})
-
-app.listen(3001, () => {
-    console.log("server is running")
-})
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
