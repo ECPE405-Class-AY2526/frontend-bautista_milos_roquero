@@ -14,11 +14,6 @@ export const Menuitems = [
     url : "/gallery",
     cName : "nav-links"
     },
-    {
-    title : "Contact",
-    url : "/contact",
-    cName : "nav-links"
-    },
      {
     title : "Sign Up",
     url : "/signup",

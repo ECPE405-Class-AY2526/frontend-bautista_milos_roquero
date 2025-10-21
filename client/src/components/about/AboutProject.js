@@ -1,6 +1,6 @@
 import React from 'react'
 import './AboutProject.css'
-import project_img from '../assets/images/image5.jpg'
+import project_img from '../../assets/images/image5.jpg'
 
 
 const Ourproject = () => {

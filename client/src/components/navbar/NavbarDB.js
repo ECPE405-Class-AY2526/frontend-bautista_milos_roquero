@@ -2,7 +2,7 @@ import { Component } from "react";
 import "./NavbarDB.css";
 
 import {Link} from "react-router-dom";
-import { Menuitems } from "./MenuitemsDB";
+import { Menuitems } from "../menuitems/MenuitemsDB";
 
 
 class NavbarDB extends Component{

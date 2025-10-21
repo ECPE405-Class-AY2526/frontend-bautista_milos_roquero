@@ -1,9 +1,9 @@
     
 import React from 'react'
 import "./Keyfeatures.css";
-import icon1 from "../assets/images/icon1.png"
-import icon2 from "../assets/images/icon2.png"
-import icon3 from "../assets/images/icon3.png"
+import icon1 from "../../assets/images/icon1.png"
+import icon2 from "../../assets/images/icon2.png"
+import icon3 from "../../assets/images/icon3.png"
 
 function Keyfeatures() {
   return (

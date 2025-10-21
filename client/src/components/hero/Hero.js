@@ -1,5 +1,5 @@
 import "./HeroStyles.css";
-import TextType from "./Reactbits/TextType/TextType"
+import TextType from "../Reactbits/TextType/TextType"
 
 function Hero(){
     return(<>

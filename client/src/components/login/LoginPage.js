@@ -80,7 +80,7 @@ function LoginPage() {
     
               <div className="login-link">
                 Don't have an account?
-                <br></br><Link to ="/">Sign Up</Link>
+                <br></br><Link to ="/signup">Sign Up</Link>
               </div>
             </div>
           </div>

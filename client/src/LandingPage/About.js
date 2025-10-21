@@ -1,7 +1,7 @@
-import Navbar from "../components/Navbar";
-import AboutUs from "../components/AboutUs";
-import Footer from "../components/Footer";
-import AboutProject from "../components/AboutProject";
+import Navbar from "../components/navbar/Navbar"
+import AboutUs from "../components/about/AboutUs";
+import Footer from "../components/footer/Footer";
+import AboutProject from "../components/about/AboutProject";
 
 function About(){
     return(

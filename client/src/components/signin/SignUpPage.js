@@ -90,7 +90,7 @@ function SignUpPage() {
 
           <div className="signin-link">
             Already have an account? 
-            <br></br><Link to ="/login">Log in</Link>
+            <br></br><Link to ="/">Log in</Link>
           </div>
         </div>
       </div>

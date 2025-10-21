@@ -1,8 +1,8 @@
 import React from 'react'
 import './AboutUs.css'
-import person_1 from '../assets/images/person-1.jpg'
-import person_2 from '../assets/images/person-2.jpg'
-import person_3 from '../assets/images/person-3.JPG'
+import person_1 from '../../assets/images/person-1.jpg'
+import person_2 from '../../assets/images/person-2.jpg'
+import person_3 from '../../assets/images/person-3.JPG'
 
 
 function AboutUs() {

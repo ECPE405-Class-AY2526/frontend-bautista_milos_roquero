@@ -1,6 +1,6 @@
 import React from 'react'
 import "./Dashboard.css"
-import NavbarDB from "../components/NavbarDB";
+import NavbarDB from "../navbar/NavbarDB";
 function Dashboard() {
   return (
     <>
