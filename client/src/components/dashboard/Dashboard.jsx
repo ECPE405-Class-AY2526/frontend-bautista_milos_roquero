@@ -87,7 +87,7 @@ export default function RiceDryingDashboard() {
                   <div className="progress-bar">
                     <div className="progress-fill orange" style={{ width: '55%' }}></div>
                   </div>
-                  <div className="sensor-range">Range: 50-60°C</div>
+                  <div className="sensor-range">Range: 40-60°C</div>
                 </div>
 
                 {/* Humidity */}
@@ -126,7 +126,7 @@ export default function RiceDryingDashboard() {
                   <div className="progress-bar">
                     <div className="progress-fill green" style={{ width: '66%' }}></div>
                   </div>
-                  <div className="sensor-range">Initial: 24kg</div>
+                  <div className="sensor-range">Initial: 25kg</div>
                 </div>
               </div>
             </div>
