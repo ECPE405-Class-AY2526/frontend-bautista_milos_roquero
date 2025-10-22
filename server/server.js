@@ -1,39 +1,28 @@
-const express = require("express")
-const mongoose = require('mongoose')
-const cors = require("cors")
-const testModel = require('./models/TestUser')
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
 
+import userRoutes from "./routes/userRoutes.js";
+import connectDB from "./config/db.js";
 
-const app = express()
-app.use(express.json())
-app.use(cors())
+dotenv.config();
 
-mongoose.connect("mongodb://127.0.0.1:27017/test-user")
+const app = express();
+const PORT = process.env.PORT || 5001;
 
-app.post('/signup',(req,res)=>{
-    testModel.create(req.body)
-    .then(testUser => res.json(testUser))
-    .catch(err => res.json(err))
-})
+connectDB();
 
-app.post('/login', (req, res) => {
-    const {email,password} = req.body;
-    testModel.findOne({email: email})
-    .then(user => {
-        if(user){
-            if(user.password === password){
-                res.json("Success")
-            }
-            else{
-                res.json("Invalid Password")
-            }
-        }
-        else{
-            res.json("No record existed")
-        }
-    })
-})
+//Middleware
+app.use(
+  cors({
+    origin: "http://localhost:5000",
+  })
+);
+app.use(express.json());
 
-app.listen(3001, () => {
-    console.log("server is running")
-})
+//Routes
+app.use("/api/users", userRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

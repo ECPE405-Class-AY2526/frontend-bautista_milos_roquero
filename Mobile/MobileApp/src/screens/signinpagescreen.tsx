@@ -9,10 +9,12 @@ import {
   SafeAreaView,
 } from "react-native";
 
-const LoginScreen = ({ navigation }: any) => {
+const SigninScreen = ({ navigation }: any) => {
   
+  const [name,setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role,setRole] = useState("");
   
   return (
     <SafeAreaView style={styles.container}>
@@ -22,6 +24,21 @@ const LoginScreen = ({ navigation }: any) => {
         style={styles.logo}
         resizeMode="contain"
       />
+
+        {/* FullName */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>FullName</Text>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your full name"
+            placeholderTextColor="#999"
+            value={name}
+            onChangeText={setName}
+            autoCapitalize="none"
+          />
+        </View>
+      </View>
 
       {/* Email */}
       <View style={styles.inputContainer}>
@@ -54,33 +71,26 @@ const LoginScreen = ({ navigation }: any) => {
         </View>
       </View>
 
-      {/* Forgot Password */}
-      <View style={styles.optionsRow}>
-        <TouchableOpacity>
-          <Text style={styles.forgotPassword}>Forgot Password?</Text>
-        </TouchableOpacity>
-      </View>
-
       {/* Sign In Button */}
       <TouchableOpacity style={styles.signInButton}
-      onPress={() => navigation.navigate("DashboardPage")}>
-        <Text style={styles.signInText}>Login</Text>
+      onPress={() => navigation.navigate("LoginPage")}>
+        <Text style={styles.signInText}>Create an Account</Text>
       </TouchableOpacity>
 
       {/* Create Account */}
       <View style={styles.signupRow}>
-        <Text style={styles.signupText}>Don’t have an account?</Text>
+        <Text style={styles.signupText}>Already have an account?</Text>
         <TouchableOpacity 
-           onPress={() => navigation.navigate("SigninPage")}>
+           onPress={() => navigation.navigate("LoginPage")}>
           
-          <Text style={styles.createAccount}> Create Account</Text>
+          <Text style={styles.createAccount}> Log in</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
 
-export default LoginScreen;
+export default SigninScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -21,14 +21,6 @@ const DashboardScreen = () => {
           <Text style={styles.statusTitle}>Status</Text>
           <Text style={styles.statusValue}>Drying</Text>
         </View>
-        <View style={styles.statusBox}>
-          <Text style={styles.statusTitle}>Remaining</Text>
-          <Text style={styles.statusValue}>1h 30m</Text>
-        </View>
-        <View style={styles.statusBox}>
-          <Text style={styles.statusTitle}>Progress</Text>
-          <Text style={styles.statusValue}>80%</Text>
-        </View>
       </View>
 
       {/* Live Sensors */}
@@ -82,37 +74,13 @@ const DashboardScreen = () => {
           maximumTrackTintColor="#ccc"
         />
 
-        <Text style={styles.label}>Ventilation Speed: Level {ventLevel}</Text>
-        <Slider
-          minimumValue={1}
-          maximumValue={5}
-          step={1}
-          value={ventLevel}
-          onValueChange={setVentLevel}
-          minimumTrackTintColor="#22c55e"
-          maximumTrackTintColor="#ccc"
-        />
-
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.applyBtn}>
             <Text style={styles.btnText}>Apply</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.stopBtn}>
-            <Text style={styles.btnText}>Stop</Text>
-          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Power Sources */}
-      <Text style={styles.sectionTitle}>Power Sources</Text>
-      <View style={styles.powerRow}>
-        <View style={styles.powerBox}>
-          <Text>Solar</Text>
-        </View>
-        <View style={styles.powerBox}>
-          <Text>AC</Text>
-        </View>
-      </View>
     </ScrollView>
   );
 };
