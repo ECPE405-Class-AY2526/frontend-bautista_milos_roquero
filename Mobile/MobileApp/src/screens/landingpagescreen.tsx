@@ -5,14 +5,14 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
-  SafeAreaView,
   ScrollView,
   Image,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context"; // ✅ Use this SafeAreaView
 
-const LandingScreen= ({ navigation }: any) => {
+const LandingScreen = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       {/* Navigation Bar */}
       <View style={styles.navbar}>
         {/* Logo */}
@@ -26,7 +26,10 @@ const LandingScreen= ({ navigation }: any) => {
 
         {/* Nav Buttons */}
         <View style={styles.navButtons}>
-          <TouchableOpacity style={styles.signupBtn}>
+          <TouchableOpacity
+            style={styles.signupBtn}
+            onPress={() => navigation.navigate("SigninPage")}
+          >
             <Text style={styles.signupText}>Sign Up</Text>
           </TouchableOpacity>
 
@@ -51,13 +54,17 @@ const LandingScreen= ({ navigation }: any) => {
               Optimizing Post-Harvest Rice Drying:{"\n"}A Real-Time IoT System
               for Time Reduction and Quality Control
             </Text>
+
             <Text style={styles.subtitle}>
               The aforementioned problem motivated the researchers to develop an
               alternative to traditional post-harvest rice grain dryers,
               utilizing IoT-based monitoring devices.
             </Text>
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("DashboardPage")} // ✅ optional navigation
+            >
               <Text style={styles.buttonText}>Explore Project</Text>
             </TouchableOpacity>
           </View>
@@ -70,9 +77,9 @@ const LandingScreen= ({ navigation }: any) => {
 export default LandingScreen;
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: "#48BB74FF" 
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#48BB74FF",
   },
   navbar: {
     flexDirection: "row",
@@ -83,32 +90,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     elevation: 3,
   },
-  logoContainer: { 
-    flexDirection: "row", 
-    alignItems: "center" 
+  logoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-
-  logo: { 
-    width: 50, 
-    height: 50, 
-    marginRight: 8 
+  logo: {
+    width: 50,
+    height: 50,
+    marginRight: 8,
   },
-
-  navButtons: { 
-    flexDirection: "row", 
-    alignItems: "center" 
+  navButtons: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-
-  signupBtn: { 
-    marginRight: 15 
+  signupBtn: {
+    marginRight: 15,
   },
-
-  signupText: { 
-    fontSize: 16, 
-    fontWeight: "bold", 
-    color: "#2c3e50" 
+  signupText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#2c3e50",
   },
-
   loginBtn: {
     borderWidth: 1,
     borderColor: "#48BB74",
@@ -116,26 +118,23 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 15,
   },
-  loginText: { 
-    fontSize: 16, 
-    fontWeight: "bold", 
-    color: "#48BB74" 
+  loginText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#48BB74",
   },
-
-  background: { 
-    flex: 1, 
-    resizeMode: "cover", 
-    justifyContent: "center", 
-    padding: 20 
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    padding: 20,
   },
-    
   overlay: {
     backgroundColor: "rgba(0,0,0,0.3)",
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
   },
-
   title: {
     fontSize: 30,
     fontWeight: "700",
@@ -143,23 +142,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 15,
   },
-
-  subtitle: { 
-    fontSize: 16, 
-    color: "#eee", 
-    textAlign: "center", 
-    marginBottom: 20 
+  subtitle: {
+    fontSize: 16,
+    color: "#eee",
+    textAlign: "center",
+    marginBottom: 20,
   },
-
-  button: { backgroundColor: "#fff", 
-    paddingHorizontal: 25, 
-    paddingVertical: 12, 
-    borderRadius: 8 
+  button: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 25,
+    paddingVertical: 12,
+    borderRadius: 8,
   },
-
-  buttonText: { 
-    color: "#2c3e50", 
-    fontWeight: "bold", 
-    fontSize: 15 
+  buttonText: {
+    color: "#2c3e50",
+    fontWeight: "bold",
+    fontSize: 15,
   },
 });

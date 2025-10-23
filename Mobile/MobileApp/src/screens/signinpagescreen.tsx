@@ -6,28 +6,27 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const SigninScreen = ({ navigation }: any) => {
-  
-  const [name,setName] = useState("");
+const SigninScreen = ({ navigation }) => {
+  const [name, setName] = useState("");``
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role,setRole] = useState("");
-  
+  const [role, setRole] = useState("");
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Logo */}
       <Image
-        source={require("../assets/images/logo2.png")} 
+        source={require("../assets/images/logo2.png")}
         style={styles.logo}
         resizeMode="contain"
       />
 
-        {/* FullName */}
+      {/* FullName */}
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>FullName</Text>
+        <Text style={styles.label}>Full Name</Text>
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.input}
@@ -35,7 +34,6 @@ const SigninScreen = ({ navigation }: any) => {
             placeholderTextColor="#999"
             value={name}
             onChangeText={setName}
-            autoCapitalize="none"
           />
         </View>
       </View>
@@ -66,23 +64,66 @@ const SigninScreen = ({ navigation }: any) => {
             placeholderTextColor="#999"
             value={password}
             onChangeText={setPassword}
-            secureTextEntry = {true}
+            secureTextEntry={true}
           />
         </View>
       </View>
 
+      {/* User Role */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Select Role</Text>
+        <View style={styles.roleContainer}>
+          <TouchableOpacity
+            style={[
+              styles.roleButton,
+              role === "User" && styles.roleButtonActive,
+            ]}
+            onPress={() => setRole("User")}
+          >
+            <Text
+              style={[
+                styles.roleText,
+                role === "User" && styles.roleTextActive,
+              ]}
+            >
+              User
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.roleButton,
+              role === "Admin" && styles.roleButtonActive,
+            ]}
+            onPress={() => setRole("Admin")}
+          >
+            <Text
+              style={[
+                styles.roleText,
+                role === "Admin" && styles.roleTextActive,
+              ]}
+            >
+              Admin
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       {/* Sign In Button */}
-      <TouchableOpacity style={styles.signInButton}
-      onPress={() => navigation.navigate("LoginPage")}>
+      <TouchableOpacity
+        style={styles.signInButton}
+        onPress={() => {
+          console.log({ name, email, password, role });
+          navigation.navigate("LoginPage");
+        }}
+      >
         <Text style={styles.signInText}>Create an Account</Text>
       </TouchableOpacity>
 
-      {/* Create Account */}
+      {/* Already have account */}
       <View style={styles.signupRow}>
         <Text style={styles.signupText}>Already have an account?</Text>
-        <TouchableOpacity 
-           onPress={() => navigation.navigate("LoginPage")}>
-          
+        <TouchableOpacity onPress={() => navigation.navigate("LoginPage")}>
           <Text style={styles.createAccount}> Log in</Text>
         </TouchableOpacity>
       </View>
@@ -129,16 +170,32 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
   },
-  optionsRow: {
+  roleContainer: {
     flexDirection: "row",
-    justifyContent: "flex-end",
-    width: "100%",
-    marginBottom: 25,
-    alignItems: "center",
+    justifyContent: "space-between",
   },
-  forgotPassword: {
-    fontSize: 13,
-    color: "#2ce57fff",
+  roleButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: "center",
+    marginHorizontal: 5,
+    backgroundColor: "#fff",
+  },
+  roleButtonActive: {
+    backgroundColor: "#28a745",
+    borderColor: "#28a745",
+  },
+  roleText: {
+    color: "#333",
+    fontWeight: "500",
+    fontSize: 14,
+  },
+  roleTextActive: {
+    color: "#fff",
+    fontWeight: "600",
   },
   signInButton: {
     backgroundColor: "#28a745",
@@ -164,6 +221,6 @@ const styles = StyleSheet.create({
   createAccount: {
     fontSize: 13,
     fontWeight: "bold",
-    color: "#2ce57fff",
+    color: "#28a745",
   },
 });
