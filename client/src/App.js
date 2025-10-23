@@ -8,7 +8,8 @@ import About from "./LandingPage/About";
 import Gallery from "./LandingPage/Gallery";
 import SignUp from "./LandingPage/SignUp";
 import Login from "./LandingPage/Login";
-import Dashboard from "./components/dashboard/Dashboard";
+import AdminDashboard from "./components/dashboard/AdminDashboard";
+import Dashboard from './components/dashboard/Dashboard'
 
 
 export default function App(){
@@ -22,6 +23,7 @@ export default function App(){
           <Route path ="/about" element={<About/>}/>
           <Route path ="/gallery" element={<Gallery/>}/>
           <Route path ="/home" element={<Home/>}/>
+          <Route path ="/admindashboard" element={<AdminDashboard/>}/>
           <Route path ="/dashboard" element={<Dashboard/>}/>
         </Routes>
          <ToastContainer />   
