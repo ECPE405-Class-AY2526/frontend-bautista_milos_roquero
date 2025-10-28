@@ -11,17 +11,36 @@ const useAuthStore = create((set, get) => ({
   login: async (email, password) => {
     set({ loading: true });
     try {
-      const res = await axios.post("/api/users/login", { email, password });
-      console.log(res.data);
-      const { token, user } = res.data;
+      const res = await axios.post("http://localhost:5001/api/auth/login", { email, password });
+      console.log('Login response:', res.data); // Debug log
+      
+      if (!res.data) {
+        throw new Error('No data received from server');
+      }
 
+      // Extract all user data from response
+      const { token, _id, username, email: userEmail, role } = res.data;
+      const user = { 
+        _id, 
+        username, 
+        email: userEmail, 
+        role: role || 'User' // Default to 'User' if role is not provided
+      };
+      
+      console.log('Processed user data:', user); // Debug log
+      
+      // Store user data in localStorage
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      
+      // Update state
       set({
         token,
         user,
         loading: false,
       });
-      return true;
+      
+      return user; // Return the full user object
     } catch (err) {
       set({ loading: false });
       return false;
@@ -31,7 +50,7 @@ const useAuthStore = create((set, get) => ({
   register: async (username, email, password) => {
     set({ loading: true });
     try {
-      const res = await axios.post("/api/users/register", {
+      const res = await axios.post("http://localhost:5001/api/auth/register", {
         username,
         email,
         password,

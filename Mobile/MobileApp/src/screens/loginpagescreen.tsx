@@ -12,10 +12,14 @@ import {
 import useAuthStore from "../store/authStore";
 
 const LoginScreen = ({ navigation }: any) => {
-  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { login, loading } = useAuthStore();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -49,10 +53,10 @@ const LoginScreen = ({ navigation }: any) => {
             style={styles.input}
             placeholder="Enter your email address"
             placeholderTextColor="#999"
-            value={email}
-            onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
           />
         </View>
       </View>
@@ -62,13 +66,21 @@ const LoginScreen = ({ navigation }: any) => {
         <Text style={styles.label}>Password</Text>
         <View style={styles.inputWrapper}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { flex: 1 }]}
             placeholder="Enter your password"
             placeholderTextColor="#999"
+            secureTextEntry={!showPassword}
             value={password}
             onChangeText={setPassword}
-            secureTextEntry = {true}
           />
+          <TouchableOpacity
+            style={styles.toggleButton}
+            onPress={togglePasswordVisibility}
+          >
+            <Text style={styles.toggleButtonText}>
+              {showPassword ? 'HIDE' : 'SHOW'}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -167,11 +179,20 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontSize: 13,
-    color: "#333",
+  },
+  toggleButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    justifyContent: 'center',
+  },
+  toggleButtonText: {
+    color: '#28a745',
+    fontSize: 14,
+    fontWeight: '500',
   },
   createAccount: {
+    color: '#2ce57fff',
     fontSize: 13,
     fontWeight: "bold",
-    color: "#2ce57fff",
   },
 });

@@ -19,14 +19,33 @@ function LoginPage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const result = await login(email, password);    
-        if(!result){
-            toast.error("Login failed. Please check your credentials.");
-        }
-        else{
+        try {
             setError("");
+            const result = await login(email, password);
+            
+            // Get the user data from localStorage
+            const userData = JSON.parse(localStorage.getItem('user'));
+            console.log('User data after login:', userData); 
+
+            if (!userData) {
+                toast.error("Login failed. No user data received.");
+                return;
+            }
+
             toast.success("Login successful!");
-            navigate('/dashboard');
+
+            // Navigate based on role
+            if (userData.role === 'Admin') {
+                console.log('Navigating to admin dashboard'); 
+                navigate('/admindashboard');
+            } else {
+                console.log('Navigating to user dashboard'); 
+                navigate('/dashboard');
+            }
+        } catch (err) {
+            console.error('Login error:', err); // Debug log
+            setError(err?.response?.data?.message || "Login failed. Please try again.");
+            toast.error(err?.response?.data?.message || "Login failed. Please try again.");
         }
     };
 

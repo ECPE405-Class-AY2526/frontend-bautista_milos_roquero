@@ -3,31 +3,31 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 const getUserRole = () => {
-  return localStorage.getItem("role"); 
-  
+  const user = JSON.parse(localStorage.getItem("user"));
+  return user?.role || null;
 };
 
 //  Route for Admin Only
-export const AdminRoute = () => {
+export const AdminRoute = ({ children }) => {
   const role = getUserRole();
   
   if (!role) return <Navigate to="/login" replace />;
 
-  return role === "admin" ? (
-    <Outlet />
+  return role === "Admin" ? (
+    children || <Outlet />
   ) : (
     <Navigate to="/dashboard" replace />
   );
 };
 
 //  Route for Normal User Only
-export const UserRoute = () => {
+export const UserRoute = ({ children }) => {
   const role = getUserRole();
 
   if (!role) return <Navigate to="/login" replace />;
 
-  return role === "user" ? (
-    <Outlet />
+  return role === "User" ? (
+    children || <Outlet />
   ) : (
     <Navigate to="/admindashboard" replace />
   );

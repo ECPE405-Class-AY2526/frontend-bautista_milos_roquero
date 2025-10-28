@@ -22,9 +22,13 @@ const SigninScreen: React.FC<SigninScreenProps> = ({ navigation }) => {
   const [fullname, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("User");
   const { register, loading } = useAuthStore();
   
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSignIn= async () => {
     if (!username || !fullname || !email || !password) {
@@ -107,9 +111,17 @@ const SigninScreen: React.FC<SigninScreenProps> = ({ navigation }) => {
             placeholderTextColor="#999"
             value={password}
             onChangeText={setPassword}
-            secureTextEntry={true}
+            secureTextEntry={!showPassword}
             editable={!loading}
           />
+          <TouchableOpacity
+            style={styles.toggleButton}
+            onPress={togglePasswordVisibility}
+          >
+            <Text style={styles.toggleButtonText}>
+              {showPassword ? "HIDE" : "SHOW"}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -270,6 +282,16 @@ const styles = StyleSheet.create({
   signupText: {
     fontSize: 13,
     color: "#333",
+  },
+  toggleButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    justifyContent: 'center',
+  },
+  toggleButtonText: {
+    color: '#28a745',
+    fontSize: 14,
+    fontWeight: '500',
   },
   createAccount: {
     fontSize: 13,
