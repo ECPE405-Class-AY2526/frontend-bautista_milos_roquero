@@ -1,5 +1,5 @@
 import Hero from "../components/hero/Hero";
-import Keyfeatures from "../components/keyfeatures/Keyfeatures";
+// import Keyfeatures from "../components/keyfeatures/Keyfeatures";
 import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
 
@@ -8,7 +8,7 @@ function Home(){
         <>
         <Navbar/>  
         <Hero/>
-        <Keyfeatures/>
+        {/* <Keyfeatures/> */}
         <Footer/>
         </>
     )

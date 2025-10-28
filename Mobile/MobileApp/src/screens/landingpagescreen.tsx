@@ -8,9 +8,9 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context"; // ✅ Use this SafeAreaView
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const LandingScreen = ({ navigation }) => {
+const LandingScreen = ({ navigation }:any) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Navigation Bar */}
@@ -63,7 +63,6 @@ const LandingScreen = ({ navigation }) => {
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate("DashboardPage")} // ✅ optional navigation
             >
               <Text style={styles.buttonText}>Explore Project</Text>
             </TouchableOpacity>

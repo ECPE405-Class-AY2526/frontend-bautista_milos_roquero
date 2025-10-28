@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
-import { Search, Download, Plus, Edit2, Trash2, BarChart2, Settings, LogOut, Users } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Download, Plus, Edit2, Trash2, Settings, LogOut, Users, AlertTriangle } from 'lucide-react';
 import './AdminDashboard.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { getAdminDashboardData, logout } from '../../api/authService';
 import logo from "../../assets/images/logo2.png";
 
 export default function UserManagement() {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
 
-  const users = [
-  ];
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      try {
+        const data = await getAdminDashboardData();
+        setUsers(data.users || []);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        if (err.message.includes('Not authorized')) {
+          navigate('/login');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdminData();
+  }, [navigate]);
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -21,6 +42,18 @@ export default function UserManagement() {
 
   return (
     <div className="dashboard-container">
+      {error && (
+        <div className="error-banner">
+          <AlertTriangle size={20} />
+          <span>{error}</span>
+        </div>
+      )}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <p>Loading admin dashboard...</p>
+        </div>
+      )}
       {/* Sidebar */}
       <div className="sidebar">
         {/* Logo */}
@@ -43,9 +76,15 @@ export default function UserManagement() {
         </nav>
 
         {/* Log Out */}
-        <button className="nav-item logout">
+        <button 
+          className="nav-item logout"
+          onClick={() => {
+            logout();
+            navigate('/login');
+          }}
+        >
           <LogOut size={16} />
-          <Link to ="/home">Log Out</Link>
+          <span>Log Out</span>
         </button>
       </div>
 

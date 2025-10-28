@@ -2,15 +2,16 @@ import React, { useState, useContext } from 'react';
 import "./LoginPage.css";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+import AuthStore from '../../utils/authStore';
 
 function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
-    const { login } = useContext(AuthContext);
+    const { login, loading } = AuthStore();
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -18,12 +19,14 @@ function LoginPage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            await login(email, password);
+        const result = await login(email, password);    
+        if(!result){
+            toast.error("Login failed. Please check your credentials.");
+        }
+        else{
+            setError("");
             toast.success("Login successful!");
-            navigate("/dashboard");
-        } catch (error) {
-            toast.error("Invalid credentials");
+            navigate('/dashboard');
         }
     };
 
@@ -69,7 +72,7 @@ function LoginPage() {
                                     onClick={togglePasswordVisibility}
                                     aria-label={showPassword ? "Hide password" : "Show password"}
                                 >
-                                    {showPassword ? "👁" : "👁️‍🗨️"}
+                                    {showPassword ? 'Hide' : 'Show'}
                                 </button>
                             </div>
                         </div>

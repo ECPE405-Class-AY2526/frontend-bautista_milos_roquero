@@ -6,14 +6,40 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { NavigationProp } from "@react-navigation/native";
+import useAuthStore from "../store/authStore";
 
-const SigninScreen = ({ navigation }) => {
-  const [name, setName] = useState("");``
+interface SigninScreenProps {
+  navigation: NavigationProp<any>;
+}
+
+const SigninScreen: React.FC<SigninScreenProps> = ({ navigation }) => {
+  
+  const [username, setUserName] = useState("");
+  const [fullname, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("User");
+  const { register, loading } = useAuthStore();
+  
+
+  const handleSignIn= async () => {
+    if (!username || !fullname || !email || !password) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    const success = await register(username, fullname, email, password);
+    if (success) {
+      Alert.alert('Success', 'Registration successful!');
+      navigation.navigate('Dashboard');
+    } else {
+      Alert.alert('Error', 'Registration failed. Please try again.');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,16 +50,32 @@ const SigninScreen = ({ navigation }) => {
         resizeMode="contain"
       />
 
+      {/* UserName */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>User Name</Text>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter username"
+            placeholderTextColor="#999"
+            value={username}
+            onChangeText={setUserName}
+            editable={!loading}
+          />
+        </View>
+      </View>
+
       {/* FullName */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Full Name</Text>
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.input}
-            placeholder="Enter your full name"
+            placeholder="Enter full name"
             placeholderTextColor="#999"
-            value={name}
-            onChangeText={setName}
+            value={fullname}
+            onChangeText={setFullName}
+            editable={!loading}
           />
         </View>
       </View>
@@ -44,12 +86,13 @@ const SigninScreen = ({ navigation }) => {
         <View style={styles.inputWrapper}>
           <TextInput
             style={styles.input}
-            placeholder="Enter your email address"
+            placeholder="Enter email address"
             placeholderTextColor="#999"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
+            editable={!loading}
           />
         </View>
       </View>
@@ -65,6 +108,7 @@ const SigninScreen = ({ navigation }) => {
             value={password}
             onChangeText={setPassword}
             secureTextEntry={true}
+            editable={!loading}
           />
         </View>
       </View>
@@ -79,6 +123,7 @@ const SigninScreen = ({ navigation }) => {
               role === "User" && styles.roleButtonActive,
             ]}
             onPress={() => setRole("User")}
+            disabled={loading}
           >
             <Text
               style={[
@@ -96,6 +141,7 @@ const SigninScreen = ({ navigation }) => {
               role === "Admin" && styles.roleButtonActive,
             ]}
             onPress={() => setRole("Admin")}
+            disabled={loading}
           >
             <Text
               style={[
@@ -111,19 +157,22 @@ const SigninScreen = ({ navigation }) => {
 
       {/* Sign In Button */}
       <TouchableOpacity
-        style={styles.signInButton}
-        onPress={() => {
-          console.log({ name, email, password, role });
-          navigation.navigate("LoginPage");
-        }}
+        style={[styles.signInButton, loading && styles.signInButtonDisabled]}
+        onPress={handleSignIn}
+        disabled={loading}
       >
-        <Text style={styles.signInText}>Create an Account</Text>
+        <Text style={styles.signInText}>
+          {loading ? "Creating..." : "Create an Account"}
+        </Text>
       </TouchableOpacity>
 
       {/* Already have account */}
       <View style={styles.signupRow}>
         <Text style={styles.signupText}>Already have an account?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("LoginPage")}>
+        <TouchableOpacity 
+          onPress={() => navigation.navigate("LoginPage")}
+          disabled={loading}
+        >
           <Text style={styles.createAccount}> Log in</Text>
         </TouchableOpacity>
       </View>
@@ -204,6 +253,10 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginBottom: 20,
+  },
+  signInButtonDisabled: {
+    backgroundColor: "#6c757d",
+    opacity: 0.7,
   },
   signInText: {
     color: "#fff",

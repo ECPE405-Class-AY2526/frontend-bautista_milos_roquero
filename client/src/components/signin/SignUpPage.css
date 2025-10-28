@@ -1,25 +1,181 @@
 * {
-    margin: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.hero {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  overflow: hidden; /* prevent page scroll */
+}
+
+.signup-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-title {
+  color: #333;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #444;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+}
+
+.password-toggle:hover {
+  color: #333;
+}
+
+.role-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.role-button {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-button:hover {
+  background: #f8f9fa;
+}
+
+.role-button.active {
+  background: #66ea9d;
+  color: white;
+  border-color: #66ea9d;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.signin-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #66ea9d;
+}
+
+.signin-link a {
+  color: #66ea9d;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signin-link a:hover {
+  text-decoration: underline;
+   margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
 .signup-container {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 120px 20px;
-    width: 100%;
-    max-width: 450px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    transform: translateY(0);
-    transition: all 0.3s ease;
-    margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  margin: 0 auto;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .signup-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 480px) {
+  .signup-container {
+    padding: 1rem;
+    margin: 10px;
+  }
 }
 
 .form-header {
@@ -37,6 +193,49 @@
 .form-group {
     margin-bottom: 25px;
     position: relative;
+    width: 100%;
+}
+
+.form-group-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+  text-align: left;
+}
+
+.form-group-role-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-group-role-button {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 0;
+  align-items: center;
+  margin: 0 5px;
+  background-color: #fff;
+  cursor: pointer;
+  text-align: center;
+}
+
+.form-group-role-button-active {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.form-group-role-text {
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group-role-text-active {
+  color: #fff;
+  font-weight: 600;
 }
 
 .form-label {
@@ -61,10 +260,10 @@
 }
 
 .form-input:focus {
-    border-color: #667eea;
-    background: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
+  border-color: #667eea;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.06);
+  outline: none;
 }
 
 .form-input:focus + .form-label {

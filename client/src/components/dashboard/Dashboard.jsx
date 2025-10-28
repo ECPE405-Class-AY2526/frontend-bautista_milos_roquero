@@ -1,15 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Activity, BarChart2, Clock, Settings, AlertTriangle, LogOut, Thermometer, Droplets, Waves, Weight } from 'lucide-react';
 import './Dashboard.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { getDashboardData, logout } from '../../api/authService';
 import logo from "../../assets/images/logo2.png";
 
 export default function RiceDryingDashboard() {
-  const [targetTemp, setTargetTemp] = useState("")
+  const [targetTemp, setTargetTemp] = useState("");
   const [targetMoisture, setTargetMoisture] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        await getDashboardData();
+        // Handle dashboard data if needed
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        if (err.message.includes('Not authorized')) {
+          navigate('/login');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, [navigate]);
 
   return (
     <div className="dashboard-container">
+      {error && (
+        <div className="error-banner">
+          <AlertTriangle size={20} />
+          <span>{error}</span>
+        </div>
+      )}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <p>Loading dashboard...</p>
+        </div>
+      )}
       {/* Sidebar */}
       <div className="sidebar">
         {/* Logo */}
@@ -44,9 +79,15 @@ export default function RiceDryingDashboard() {
         </nav>
 
         {/* Log Out */}
-        <button className="nav-item logout">
+        <button 
+          className="nav-item logout"
+          onClick={() => {
+            logout();
+            navigate('/login');
+          }}
+        >
           <LogOut size={16} />
-          <Link to ="/home">Log Out</Link>
+          <span>Log Out</span>
         </button>
       </div>
 

@@ -6,6 +6,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Enter a username"],
     },
+    fullname: {
+      type: String,
+      required: [true, "Enter a fullname"],
+    },
     email: {
       type: String,
       required: [true, "Enter an email"],
@@ -17,8 +21,8 @@ const userSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ["User", "Admin"],
+      default: "User",
     },
   },
   { timestamps: true }

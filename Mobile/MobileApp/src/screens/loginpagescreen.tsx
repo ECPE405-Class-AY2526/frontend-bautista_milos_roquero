@@ -7,12 +7,30 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  Alert,
 } from "react-native";
+import useAuthStore from "../store/authStore";
 
 const LoginScreen = ({ navigation }: any) => {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login, loading } = useAuthStore();
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    const success = await login(email, password);
+    if (success) {
+      Alert.alert('Success', 'Login successful!');
+      navigation.navigate('Dashboard');
+    } else {
+      Alert.alert('Error', 'Invalid credentials');
+    }
+  };
   
   return (
     <SafeAreaView style={styles.container}>
@@ -63,7 +81,7 @@ const LoginScreen = ({ navigation }: any) => {
 
       {/* Sign In Button */}
       <TouchableOpacity style={styles.signInButton}
-      onPress={() => navigation.navigate("DashboardPage")}>
+      onPress={handleLogin}>
         <Text style={styles.signInText}>Login</Text>
       </TouchableOpacity>
 

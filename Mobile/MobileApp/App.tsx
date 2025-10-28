@@ -1,7 +1,8 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context"; 
+import useAuthStore from "./src/store/authStore";
 
 import LandingScreen from "./src/screens/landingpagescreen";
 import LoginScreen from "./src/screens/loginpagescreen";
@@ -11,6 +12,11 @@ import SigninScreen from "./src/screens/signinpagescreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+   const initializeAuth = useAuthStore(state => state.initializeAuth);
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
   return (
     <SafeAreaProvider> 
       <NavigationContainer>
