@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Here's a brief description of the project setup and instructions to run both the client and server, suitable for a `README.md` file.
 
 ### Project Setup
