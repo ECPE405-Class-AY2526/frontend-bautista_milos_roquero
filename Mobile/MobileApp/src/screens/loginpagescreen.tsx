@@ -27,12 +27,21 @@ const LoginScreen = ({ navigation }: any) => {
       return;
     }
 
-    const success = await login(email, password);
-    if (success) {
-      Alert.alert('Success', 'Login successful!');
-      navigation.navigate('Dashboard');
-    } else {
-      Alert.alert('Error', 'Invalid credentials');
+    try {
+      await login(email, password);
+      // If login is successful, navigate immediately
+      navigation.navigate('DashboardPage');
+    } catch (error: any) {
+      // Handle specific error cases
+      let errorMessage = 'Invalid credentials';
+      if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      Alert.alert('Error', errorMessage);
+    } finally {
+      setPassword(''); // Clear password field for security
     }
   };
   

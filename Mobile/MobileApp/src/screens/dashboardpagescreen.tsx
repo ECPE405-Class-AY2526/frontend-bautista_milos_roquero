@@ -6,10 +6,25 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context"; 
+import { SafeAreaView } from "react-native-safe-area-context";
+import useAuthStore from "../store/authStore";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-const DashboardScreen = () => {
+type RootStackParamList = {
+  LandingPage: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+const DashboardScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
+  const { logout } = useAuthStore();
   const [targetTemp, setTargetTemp] = useState("");
   const [targetMoisture, setTargetMoisture] = useState("");
 
@@ -17,10 +32,45 @@ const DashboardScreen = () => {
     console.log("Applied:", { targetTemp, targetMoisture });
   };
 
+  const handleLogout = () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Logout",
+          onPress: async () => {
+            try {
+              await logout();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'LandingPage' }],
+              });
+            } catch (error) {
+              console.error('Logout error:', error);
+              Alert.alert('Error', 'Failed to logout. Please try again.');
+            }
+          }
+        }
+      ]
+    );
+  };
+
   return (
-    <SafeAreaView style={styles.safeArea}> 
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Rice Dryer Dashboard</Text>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+      
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* Header Status */}
+        {/* Status Section */}
         <View style={styles.statusRow}>
           <View style={styles.statusBox}>
             <Text style={styles.statusTitle}>Status</Text>
@@ -87,22 +137,70 @@ const DashboardScreen = () => {
   );
 };
 
-export default DashboardScreen;
+interface Styles {
+  safeArea: ViewStyle;
+  header: ViewStyle;
+  headerTitle: TextStyle;
+  logoutButton: ViewStyle;
+  logoutText: TextStyle;
+  container: ViewStyle;
+  statusRow: ViewStyle;
+  statusBox: ViewStyle;
+  statusTitle: TextStyle;
+  statusValue: TextStyle;
+  sectionTitle: TextStyle;
+  card: ViewStyle;
+  label: TextStyle;
+  value: TextStyle;
+  sub: TextStyle;
+  controls: ViewStyle;
+  input: ViewStyle;
+  buttonRow: ViewStyle;
+  applyBtn: ViewStyle;
+  btnText: TextStyle;
+}
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<Styles>({
   safeArea: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f5f5",
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  logoutButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#dc3545',
+    borderRadius: 6,
+    elevation: 1,
+  },
+  logoutText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
   container: {
     flex: 1,
     backgroundColor: "#fff",
     padding: 15,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginVertical: 10,
   },
   statusRow: {
     flexDirection: "row",
@@ -123,6 +221,11 @@ const styles = StyleSheet.create({
   statusValue: {
     fontSize: 16,
     fontWeight: "600",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginVertical: 10,
   },
   card: {
     backgroundColor: "#f9fafb",
@@ -153,24 +256,25 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 8,
+    borderRadius: 6,
     padding: 10,
-    marginVertical: 6,
-    fontSize: 16,
+    marginVertical: 5,
+    backgroundColor: "#fff",
   },
   buttonRow: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 10,
+    marginTop: 15,
   },
   applyBtn: {
-    backgroundColor: "#22c55e",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
+    backgroundColor: "#007AFF",
+    padding: 12,
+    borderRadius: 6,
+    alignItems: "center",
   },
   btnText: {
     color: "#fff",
+    fontSize: 16,
     fontWeight: "600",
   },
 });
+
+export default DashboardScreen;

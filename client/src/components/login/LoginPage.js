@@ -19,6 +19,12 @@ function LoginPage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        if (!email || !password) {
+            setError("Please fill in all fields");
+            toast.error("Please fill in all fields");
+            return;
+        }
+
         try {
             setError("");
             const result = await login(email, password);
@@ -28,7 +34,9 @@ function LoginPage() {
             console.log('User data after login:', userData); 
 
             if (!userData) {
-                toast.error("Login failed. No user data received.");
+                const error = "Login failed. No user data received.";
+                setError(error);
+                toast.error(error);
                 return;
             }
 
@@ -43,9 +51,13 @@ function LoginPage() {
                 navigate('/dashboard');
             }
         } catch (err) {
-            console.error('Login error:', err); // Debug log
-            setError(err?.response?.data?.message || "Login failed. Please try again.");
-            toast.error(err?.response?.data?.message || "Login failed. Please try again.");
+            console.error('Login error:', err);
+            const errorMessage = err?.response?.data?.message || 
+                               (err.code === 'ERR_NETWORK' ? 
+                                'Network error. Trying alternate server...' : 
+                                'Login failed. Please try again.');
+            setError(errorMessage);
+            toast.error(errorMessage);
         }
     };
 

@@ -36,12 +36,37 @@ const SigninScreen: React.FC<SigninScreenProps> = ({ navigation }) => {
       return;
     }
 
-    const success = await register(username, fullname, email, password);
-    if (success) {
-      Alert.alert('Success', 'Registration successful!');
-      navigation.navigate('Dashboard');
-    } else {
-      Alert.alert('Error', 'Registration failed. Please try again.');
+    try {
+      await register(username, fullname, email, password);
+      Alert.alert(
+        'Success',
+        'Registration successful! Please login with your credentials.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setUserName('');
+              setFullName('');
+              setEmail('');
+              setPassword('');
+              navigation.replace('LoginPage'); 
+            }
+          }
+        ]
+      );
+    } catch (error: any) {
+      // Handle specific error cases
+      let errorMessage = 'Registration failed. Please try again.';
+      
+      if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error?.message && error.message.includes('duplicate')) {
+        errorMessage = 'This email is already registered.';
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
+      Alert.alert('Error', errorMessage);
     }
   };
 

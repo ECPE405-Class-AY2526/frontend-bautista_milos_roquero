@@ -18,7 +18,16 @@ function SignUpPage() {
 
   const handleSubmit = async (e) => {
     setLoading(true);
+    setError('');
     e.preventDefault();
+
+    if (!username || !fullname || !email || !password) {
+      setError('Please fill in all required fields');
+      toast.error('Please fill in all required fields');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await api.post("/api/auth/register", {
         username,
@@ -30,13 +39,20 @@ function SignUpPage() {
       
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
+        if (response.data.user) {
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        }
         toast.success("Registration successful!");
         navigate(role === 'Admin' ? '/admindashboard' : '/dashboard');
       }
     } catch (err) {
-      toast.error(
-        err?.response?.data?.message || "Registration failed. Please try again."
-      );
+      console.error('Registration error:', err);
+      const errorMessage = err?.response?.data?.message || 
+                          (err.code === 'ERR_NETWORK' ? 
+                            'Network error. Trying alternate server...' : 
+                            'Registration failed. Please try again.');
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
