@@ -2,33 +2,47 @@ import React, { useState, useEffect } from 'react';
 import { Activity, BarChart2, Clock, Settings, AlertTriangle, LogOut, Thermometer, Droplets, Waves, Weight } from 'lucide-react';
 import './Dashboard.css';
 import { useNavigate } from 'react-router-dom';
-import { getDashboardData, logout } from '../../api/authService';
+import authService from '../../api/authService';
 import logo from "../../assets/images/logo2.png";
 
 export default function RiceDryingDashboard() {
   const [targetTemp, setTargetTemp] = useState("");
   const [targetMoisture, setTargetMoisture] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true;
     const fetchDashboardData = async () => {
       try {
-        await getDashboardData();
-        // Handle dashboard data if needed
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-        if (err.message.includes('Not authorized')) {
-          navigate('/login');
+        // Only show loading if data fetch takes longer than 300ms
+        const loadingTimeout = setTimeout(() => {
+          if (isMounted) setLoading(true);
+        }, 300);
+
+        await authService.getDashboardData();
+        clearTimeout(loadingTimeout);
+        
+        if (isMounted) {
+          setError(null);
+          setLoading(false);
         }
-      } finally {
-        setLoading(false);
+      } catch (err) {
+        if (isMounted) {
+          setError(err.message);
+          if (err.message.includes('Not authorized')) {
+            navigate('/login');
+          }
+        }
       }
     };
 
     fetchDashboardData();
+    
+    return () => {
+      isMounted = false;
+    };
   }, [navigate]);
 
   return (
@@ -60,7 +74,10 @@ export default function RiceDryingDashboard() {
             <BarChart2 size={16} />
             <span>Dashboard</span>
           </button>
-          <button className="nav-item">
+          <button 
+            className="nav-item"
+            onClick={() => navigate('/analytics')}
+          >
             <Activity size={16} />
             <span>Analytics</span>
           </button>
@@ -82,7 +99,7 @@ export default function RiceDryingDashboard() {
         <button 
           className="nav-item logout"
           onClick={() => {
-            logout();
+            authService.logout();
             navigate('/login');
           }}
         >

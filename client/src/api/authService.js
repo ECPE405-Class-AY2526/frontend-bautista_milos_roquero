@@ -1,92 +1,146 @@
-import { API_ENDPOINTS } from './config';
+import api from '../utils/axios';
 
-// Helper to parse JSON responses
-const parseJSON = async (res) => {
-  const text = await res.text();
-  try {
-    return text ? JSON.parse(text) : {};
-  } catch {
-    return { message: text };
+const handleApiError = (error) => {
+  if (error.code === 'ERR_NETWORK') {
+    throw new Error('Unable to connect to server. Please check your connection and try again.');
   }
+  
+  const message = error.response?.data?.message || error.message || 'An error occurred';
+  const err = new Error(message);
+  err.status = error.response?.status;
+  err.data = error.response?.data;
+  throw err;
 };
 
-const handleResponse = async (res) => {
-  const data = await parseJSON(res);
-  if (!res.ok) {
-    const err = new Error(data.message || 'Request failed');
-    err.status = res.status;
-    err.body = data;
-    throw err;
+const authService = {
+  async getDashboardData() {
+    try {
+      const response = await api.get('/api/dashboard');
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  async getAdminDashboardData() {
+    try {
+      const response = await api.get('/api/auth/admin/dashboard');
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  async login(email, password) {
+    try {
+      const response = await api.post('/api/auth/login', { email, password });
+      const { token, user } = response.data;
+      
+      if (token && user) {
+        // Clean the token before storing
+        const cleanToken = token.replace(/^["']|["']$/g, '').trim();
+        localStorage.setItem('token', cleanToken);
+        localStorage.setItem('user', JSON.stringify(user));
+        return { token: cleanToken, user };
+      } else {
+        throw new Error('Invalid response from server');
+      }
+    } catch (error) {
+      // Clear any invalid tokens
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      handleApiError(error);
+    }
+  },
+
+  async registerUser(userData) {
+    try {
+      const response = await api.post('/api/auth/register', userData);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  async register(userData) {
+    try {
+      const response = await api.post('/api/auth/register', userData);
+      const { token, user } = response.data;
+      
+      if (token && user) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        return { token, user };
+      } else {
+        throw new Error('Invalid response from server');
+      }
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  async logout() {
+    try {
+      await api.post('/api/auth/logout').catch(() => {
+        // Ignore server errors during logout
+      });
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+  },
+
+  isAuthenticated() {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    if (!token || !user) return false;
+    
+    try {
+      // Check if token is properly formatted
+      const cleanToken = token.replace(/^["']|["']$/g, '').trim();
+      if (!cleanToken || cleanToken !== token) {
+        // If token was malformed, clean it up
+        localStorage.setItem('token', cleanToken);
+      }
+      return true;
+    } catch {
+      // If there's any error, clear the invalid tokens
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      return false;
+    }
+  },
+
+  getUser() {
+    const userStr = localStorage.getItem('user');
+    try {
+      return userStr ? JSON.parse(userStr) : null;
+    } catch {
+      return null;
+    }
+  },
+
+  getToken() {
+    return localStorage.getItem('token');
+  },
+
+  async updateUser(userId, userData) {
+    try {
+      const response = await api.put(`/api/auth/users/${userId}`, userData);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  async deleteUser(userId) {
+    try {
+      const response = await api.delete(`/api/auth/users/${userId}`);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
   }
-  return data;
-};
+}
 
-const getToken = () => localStorage.getItem('token');
-const getStoredUser = () => {
-  const u = localStorage.getItem('user');
-  return u ? JSON.parse(u) : null;
-};
-const setAuthData = (token, user) => {
-  localStorage.setItem('token', token);
-  localStorage.setItem('user', JSON.stringify(user));
-};
-const clearAuthData = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-};
-
-export const register = async (payload) => {
-  const res = await fetch(API_ENDPOINTS.AUTH.REGISTER, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-  const data = await handleResponse(res);
-  // some servers return token + user, others return user with token field
-  if (data.token) setAuthData(data.token, data);
-  return data;
-};
-
-export const login = async (credentials) => {
-  const res = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials)
-  });
-  const data = await handleResponse(res);
-  if (data.token) setAuthData(data.token, data);
-  return data;
-};
-
-export const logout = () => {
-  clearAuthData();
-};
-
-export const getProfile = async () => {
-  const token = getToken();
-  if (!token) throw new Error('No token');
-  const res = await fetch(API_ENDPOINTS.AUTH.PROFILE, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  return handleResponse(res);
-};
-
-export const getDashboardData = async () => {
-  const token = getToken();
-  if (!token) throw new Error('No token');
-  const user = getStoredUser();
-  const endpoint = user?.role === 'Admin' ? API_ENDPOINTS.AUTH.ADMIN_DASHBOARD : API_ENDPOINTS.AUTH.USER_DASHBOARD;
-  const res = await fetch(endpoint, { headers: { Authorization: `Bearer ${token}` } });
-  return handleResponse(res);
-};
-
-export const getAdminDashboardData = async () => {
-  const token = getToken();
-  if (!token) throw new Error('No token');
-  const res = await fetch(API_ENDPOINTS.AUTH.ADMIN_DASHBOARD, { headers: { Authorization: `Bearer ${token}` } });
-  return handleResponse(res);
-};
-
-export const isAuthenticated = () => !!getToken() && !!getStoredUser();
-export const getUserRole = () => getStoredUser()?.role || null;
-export const isAdmin = () => getUserRole() === 'Admin';
+export default authService;

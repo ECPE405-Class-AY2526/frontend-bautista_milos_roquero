@@ -15,12 +15,13 @@ const useAuthStore = create((set) => ({
         throw new Error('No data received from server');
       }
 
-      const { token, _id, username, email: userEmail, role } = res.data;
+      const { token, _id, username, email: userEmail, role, redirectTo } = res.data;
       const user = { 
         _id, 
         username, 
         email: userEmail, 
-        role: role || 'User'
+        role: role || 'User',
+        redirectTo
       };
       
       localStorage.setItem("token", token);

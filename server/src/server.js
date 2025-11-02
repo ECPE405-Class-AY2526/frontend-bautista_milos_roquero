@@ -22,12 +22,12 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function(origin, callback) {
-      // allow requests with no origin (like mobile apps, curl, postman)
+     
       if (!origin) return callback(null, true);
       
-      // Check if the origin is in our allowedOrigins array
+      
       if (allowedOrigins.indexOf(origin) === -1) {
-        // If not found, dynamically add the origin if it matches our pattern
+        
         const originHostname = new URL(origin).hostname;
         if (/^(\d{1,3}\.){3}\d{1,3}$/.test(originHostname)) {
           allowedOrigins.push(origin);
@@ -59,6 +59,6 @@ app.use("/api/auth", authRoutes);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(`Access locally via: http://localhost:${PORT}`);
-  console.log(`Access via IP: http://YOUR_IP:${PORT}`);
+  // console.log(`Access locally via: http://localhost:${PORT}`);
+  // console.log(`Access via IP: http://YOUR_IP:${PORT}`);
 });

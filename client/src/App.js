@@ -14,6 +14,7 @@ import LoginPage from './components/login/LoginPage';
 import SignUpPage from './components/signin/SignUpPage';
 import AdminDashboard from "./components/dashboard/AdminDashboard";
 import Dashboard from './components/dashboard/Dashboard';
+import Analytics from './components/dashboard/Analytics';
 
 
 export default function App(){
@@ -52,6 +53,16 @@ export default function App(){
                 <AdminRoute>
                   <AdminDashboard />
                 </AdminRoute>
+              }
+            />
+
+            {/* Analytics Route */}
+            <Route
+              path="/analytics"
+              element={
+                <UserRoute>
+                  <Analytics />
+                </UserRoute>
               }
             />
 

@@ -42,14 +42,10 @@ function LoginPage() {
 
             toast.success("Login successful!");
 
-            // Navigate based on role
-            if (userData.role === 'Admin') {
-                console.log('Navigating to admin dashboard'); 
-                navigate('/admindashboard');
-            } else {
-                console.log('Navigating to user dashboard'); 
-                navigate('/dashboard');
-            }
+            // Navigate using the redirectTo path from server response
+            const redirectPath = userData.redirectTo || '/dashboard';
+            console.log('Navigating to:', redirectPath);
+            navigate(redirectPath);
         } catch (err) {
             console.error('Login error:', err);
             const errorMessage = err?.response?.data?.message || 
