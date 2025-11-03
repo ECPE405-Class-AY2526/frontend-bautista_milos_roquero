@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { AuthProvider } from './utils/AuthContext.jsx';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,8 +10,8 @@ import {AdminRoute, UserRoute } from './utils/ProtectedRoute.js';
 import Home from "./LandingPage/Home";
 import About from "./LandingPage/About";
 import Gallery from "./LandingPage/Gallery";
-import LoginPage from './components/login/LoginPage';
-import SignUpPage from './components/signin/SignUpPage';
+import Login from "./LandingPage/Login";
+import SignUp from "./LandingPage/SignUp";
 import AdminDashboard from "./components/dashboard/AdminDashboard";
 import Dashboard from './components/dashboard/Dashboard';
 import Analytics from './components/dashboard/Analytics';
@@ -29,12 +29,12 @@ export default function App(){
         <AuthProvider>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Navigate to="/home" replace />} />
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/gallery" element={<Gallery />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
 
             {/* Protected User Routes */}
             <Route
@@ -45,6 +45,22 @@ export default function App(){
                 </UserRoute>
               }
             />
+            <Route
+              path="/dashboard/history"
+              element={
+                <UserRoute>
+                  <Dashboard view="history" />
+                </UserRoute>
+              }
+            />
+            <Route
+              path="/dashboard/settings"
+              element={
+                <UserRoute>
+                  <Dashboard view="settings" />
+                </UserRoute>
+              }
+            />
 
             {/* Protected Admin Routes */}
             <Route
@@ -52,6 +68,14 @@ export default function App(){
               element={
                 <AdminRoute>
                   <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admindashboard/settings"
+              element={
+                <AdminRoute>
+                  <AdminDashboard view="settings" />
                 </AdminRoute>
               }
             />
@@ -93,3 +117,4 @@ export default function App(){
       </div>
   )
 }
+

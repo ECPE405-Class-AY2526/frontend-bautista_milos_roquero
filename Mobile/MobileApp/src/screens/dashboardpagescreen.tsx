@@ -11,7 +11,7 @@ import {
   ViewStyle,
   TextStyle,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import useAuthStore from "../store/authStore";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -27,6 +27,8 @@ const DashboardScreen: React.FC = () => {
   const { logout } = useAuthStore();
   const [targetTemp, setTargetTemp] = useState("");
   const [targetMoisture, setTargetMoisture] = useState("");
+  const [view, setView] = useState<'dashboard' | 'analytics' | 'history' | 'settings' | 'alerts'>('dashboard');
+  const insets = useSafeAreaInsets();
 
   const handleApply = () => {
     console.log("Applied:", { targetTemp, targetMoisture });
@@ -61,25 +63,53 @@ const DashboardScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Rice Dryer Dashboard</Text>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.safeArea} edges={['top','bottom']}>
       
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 96 + insets.bottom }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.pageHeader}>
+          <Text style={styles.pageTitle}>Rice Grain Drying System Dashboard</Text>
+          <Text style={styles.pageSubtitle}>Real-time monitoring and control interface</Text>
+        </View>
+        {view !== 'dashboard' && (
+          <>
+            <Text style={styles.sectionTitle}>
+              {view === 'analytics' ? 'Analytics' : view === 'history' ? 'History' : view === 'settings' ? 'Settings' : 'Alerts'}
+            </Text>
+            <View style={styles.card}>
+              <Text style={styles.label}>
+                {(view.charAt(0).toUpperCase() + view.slice(1)) + ' placeholder'}
+              </Text>
+              <Text style={styles.sub}>Coming soon</Text>
+            </View>
+          </>
+        )}
+        <View style={view !== 'dashboard' ? { display: 'none' } : undefined}>
         {/* Status Section */}
-        <View style={styles.statusRow}>
-          <View style={styles.statusBox}>
-            <Text style={styles.statusTitle}>Status</Text>
+        <View style={styles.statusGrid}>
+          <View style={styles.statusCard}>
+            <Text style={styles.statusTitle}>System Status</Text>
             <Text style={styles.statusValue}>Drying</Text>
+          </View>
+          <View style={styles.statusCard}>
+            <Text style={styles.statusTitle}>Gateway Status</Text>
+            <Text style={styles.statusValue}>Online</Text>
+          </View>
+          <View style={styles.statusCard}>
+            <Text style={styles.statusTitle}>Active Sensors</Text>
+            <Text style={styles.statusValue}>3/3</Text>
+          </View>
+          <View style={styles.statusCard}>
+            <Text style={styles.statusTitle}>Actuators Online</Text>
+            <Text style={styles.statusValue}>3/3</Text>
           </View>
         </View>
 
-        {/* Live Sensors */}
-        <Text style={styles.sectionTitle}>Live Sensors</Text>
+        {/* Sensor Readings */}
+        <Text style={styles.sectionTitle}>Sensor Readings</Text>
 
         <View style={styles.card}>
           <Text style={styles.label}>Temperature</Text>
@@ -132,7 +162,31 @@ const DashboardScreen: React.FC = () => {
             </TouchableOpacity>
           </View>
         </View>
+        </View>
       </ScrollView>
+      <View style={[
+        styles.bottomNav,
+        { height: 64 + insets.bottom, paddingBottom: insets.bottom, zIndex: 10 }
+      ]}>
+        <TouchableOpacity style={[styles.bottomNavItem, view === 'dashboard' && styles.bottomNavItemActive]} onPress={() => setView('dashboard')}>
+          <Text style={[styles.bottomNavLabel, view === 'dashboard' && styles.bottomNavLabelActive]}>Dashboard</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.bottomNavItem, view === 'analytics' && styles.bottomNavItemActive]} onPress={() => setView('analytics')}>
+          <Text style={[styles.bottomNavLabel, view === 'analytics' && styles.bottomNavLabelActive]}>Analytics</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.bottomNavItem, view === 'history' && styles.bottomNavItemActive]} onPress={() => setView('history')}>
+          <Text style={[styles.bottomNavLabel, view === 'history' && styles.bottomNavLabelActive]}>History</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.bottomNavItem, view === 'settings' && styles.bottomNavItemActive]} onPress={() => setView('settings')}>
+          <Text style={[styles.bottomNavLabel, view === 'settings' && styles.bottomNavLabelActive]}>Settings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.bottomNavItem, view === 'alerts' && styles.bottomNavItemActive]} onPress={() => setView('alerts')}>
+          <Text style={[styles.bottomNavLabel, view === 'alerts' && styles.bottomNavLabelActive]}>Alerts</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bottomNavItem} onPress={handleLogout}>
+          <Text style={styles.bottomNavLabel}>Logout</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -144,6 +198,11 @@ interface Styles {
   logoutButton: ViewStyle;
   logoutText: TextStyle;
   container: ViewStyle;
+  pageHeader: ViewStyle;
+  pageTitle: TextStyle;
+  pageSubtitle: TextStyle;
+  statusGrid: ViewStyle;
+  statusCard: ViewStyle;
   statusRow: ViewStyle;
   statusBox: ViewStyle;
   statusTitle: TextStyle;
@@ -158,6 +217,11 @@ interface Styles {
   buttonRow: ViewStyle;
   applyBtn: ViewStyle;
   btnText: TextStyle;
+  bottomNav: ViewStyle;
+  bottomNavItem: ViewStyle;
+  bottomNavItemActive: ViewStyle;
+  bottomNavLabel: TextStyle;
+  bottomNavLabelActive: TextStyle;
 }
 
 const styles = StyleSheet.create<Styles>({
@@ -201,6 +265,34 @@ const styles = StyleSheet.create<Styles>({
     flex: 1,
     backgroundColor: "#fff",
     padding: 15,
+    paddingBottom: 96, // space for bottom nav
+  },
+  pageHeader: {
+    marginBottom: 8,
+  },
+  pageTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#333',
+  },
+  pageSubtitle: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginTop: 2,
+  },
+  statusGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginVertical: 6,
+  },
+  statusCard: {
+    width: '48%',
+    backgroundColor: '#f9fafb',
+    borderRadius: 12,
+    padding: 12,
+    marginVertical: 6,
+    alignItems: 'center',
   },
   statusRow: {
     flexDirection: "row",
@@ -274,6 +366,46 @@ const styles = StyleSheet.create<Styles>({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  bottomNav: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 64,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 6,
+  },
+  bottomNavItem: {
+    flex: 1,
+    height: 40,
+    marginHorizontal: 4,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomNavItemActive: {
+    backgroundColor: 'rgba(34,197,94,0.12)',
+    borderWidth: 1,
+    borderColor: '#22c55e',
+  },
+  bottomNavLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#6b7280',
+  },
+  bottomNavLabelActive: {
+    color: '#22c55e',
   },
 });
 

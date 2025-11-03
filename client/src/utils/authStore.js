@@ -10,29 +10,30 @@ const useAuthStore = create((set) => ({
     set({ loading: true });
     try {
       const res = await api.post("/api/auth/login", { email, password });
-      
-      if (!res.data) {
-        throw new Error('No data received from server');
+      // Ensure success only on valid credentials
+      if (!res || res.status !== 200 || !res.data || !res.data.token) {
+        const message = res?.data?.message || 'Invalid email or password';
+        throw new Error(message);
       }
 
       const { token, _id, username, email: userEmail, role, redirectTo } = res.data;
-      const user = { 
-        _id, 
-        username, 
-        email: userEmail, 
-        role: role || 'User',
+      const user = {
+        _id,
+        username,
+        email: userEmail,
+        role, // do not default to 'User' to avoid bypassing guards
         redirectTo
       };
-      
+
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      
+
       set({
         token,
         user,
         loading: false
       });
-      
+
       return user;
     } catch (err) {
       set({ loading: false });

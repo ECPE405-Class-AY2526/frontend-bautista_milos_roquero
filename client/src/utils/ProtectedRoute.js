@@ -7,11 +7,17 @@ const getUserRole = () => {
   return user?.role || null;
 };
 
+const hasValidToken = () => {
+  const token = localStorage.getItem('token');
+  return Boolean(token && token !== 'undefined' && token.trim());
+};
+
 //  Route for Admin Only
 export const AdminRoute = ({ children }) => {
   const role = getUserRole();
+  const validToken = hasValidToken();
   
-  if (!role) return <Navigate to="/login" replace />;
+  if (!role || !validToken) return <Navigate to="/login" replace />;
 
   return role === "Admin" ? (
     children || <Outlet />
@@ -23,8 +29,9 @@ export const AdminRoute = ({ children }) => {
 //  Route for Normal User Only
 export const UserRoute = ({ children }) => {
   const role = getUserRole();
+  const validToken = hasValidToken();
 
-  if (!role) return <Navigate to="/login" replace />;
+  if (!role || !validToken) return <Navigate to="/login" replace />;
 
   return role === "User" ? (
     children || <Outlet />

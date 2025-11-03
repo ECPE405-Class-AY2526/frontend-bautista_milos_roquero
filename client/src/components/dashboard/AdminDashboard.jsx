@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import { Search, Download, Plus, Edit2, Trash2, Settings, LogOut, Users, AlertTriangle } from 'lucide-react';
 import './AdminDashboard.css';
 import { useNavigate } from 'react-router-dom';
@@ -7,12 +8,13 @@ import logo from "../../assets/images/logo2.png";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function UserManagement() {
+export default function UserManagement({ view }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -162,11 +164,17 @@ export default function UserManagement() {
 
         {/* Navigation */}
         <nav className="nav-section">
-          <button className="nav-item active">
+          <button 
+            className={`nav-item ${view !== 'settings' ? 'active' : ''}`}
+            onClick={() => navigate('/admindashboard')}
+          >
             <Users size={16} />
             <span>Users</span>
           </button>
-          <button className="nav-item">
+          <button 
+            className={`nav-item ${view === 'settings' ? 'active' : ''}`}
+            onClick={() => navigate('/admindashboard/settings')}
+          >
             <Settings size={16} />
             <span>Settings</span>
           </button>
@@ -187,112 +195,133 @@ export default function UserManagement() {
 
       {/* Main Content */}
       <div className="main-content">
-        {/* Header */}
-        <div className="header">
-          <h1>USER MANAGEMENT</h1>
-          <p>Manage all users in one place. Control access, assign roles, and monitor activity across your platform.</p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="stats-container">
-          <div className="stat-card">
-            <h3>Total Users</h3>
-            <p className="stat-number">{stats.totalUsers}</p>
-          </div>
-          <div className="stat-card">
-            <h3>Admin</h3>
-            <p className="stat-number">{stats.admins}</p>
-          </div>
-          <div className="stat-card">
-            <h3>Regular Users</h3>
-            <p className="stat-number">{stats.regularUsers}</p>
-          </div>
-        </div>
-
-        {/* Content Area */}
-        <div className="content-area">
-          <div className="toolbar">
-            <div className="toolbar-left">
-              <div className="search-box">
-                <Search size={18} />
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              <div className="role-filter">
-                <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
-                  <option value="all">Role</option>
-                  <option value="admin">Admin</option>
-                  <option value="user">User</option>
-                </select>
+        {view === 'settings' ? (
+          <>
+            {/* Header */}
+            <div className="header">
+              <h1>SETTINGS</h1>
+              <p>Admin settings placeholder. Configure platform preferences.</p>
+            </div>
+            {/* Content Area */}
+            <div className="content-area">
+              <div className="stats-container">
+                <div className="stat-card">
+                  <h3>Settings</h3>
+                  <p className="stat-number">PlaceHolder</p>
+                </div>
               </div>
             </div>
-            <div className="toolbar-right">
-              <button className="btn-secondary">
-                <Download size={18} />
-                Export
-              </button>
-              <button 
-                className="btn-primary"
-                onClick={() => setShowAddModal(true)}
-              >
-                <Plus size={18} />
-                Add User
-              </button>
+          </>
+        ) : (
+          <>
+            {/* Header */}
+            <div className="header">
+              <h1>USER MANAGEMENT</h1>
+              <p>Manage all users in one place. Control access, assign roles, and monitor activity across your platform.</p>
             </div>
-          </div>
 
-          <div className="user-table-card">
-            <div className="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredUsers.map((user, index) => (
-                    <tr key={user._id || index}>
-                      <td className="username">{user.username}</td>
-                      <td>{user.fullname}</td>
-                      <td>{user.email}</td>
-                      <td>
-                        <span className={`role-badge ${user.role.toLowerCase()}`}>
-                          {user.role}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="actions">
-                          <button 
-                            className="icon-btn"
-                            onClick={() => handleEditUser(user)}
-                            title="Edit user"
-                          >
-                            <Edit2 size={16} />
-                          </button>
-                          <button 
-                            className="icon-btn delete"
-                            onClick={() => handleDeleteUser(user._id)}
-                            title="Delete user"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            {/* Stats Cards */}
+            <div className="stats-container">
+              <div className="stat-card">
+                <h3>Total Users</h3>
+                <p className="stat-number">{stats.totalUsers}</p>
+              </div>
+              <div className="stat-card">
+                <h3>Admin</h3>
+                <p className="stat-number">{stats.admins}</p>
+              </div>
+              <div className="stat-card">
+                <h3>Regular Users</h3>
+                <p className="stat-number">{stats.regularUsers}</p>
+              </div>
             </div>
-          </div>
-        </div>
+
+            {/* Content Area */}
+            <div className="content-area">
+              <div className="toolbar">
+                <div className="toolbar-left">
+                  <div className="search-box">
+                    <Search size={18} />
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <div className="role-filter">
+                    <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
+                      <option value="all">Role</option>
+                      <option value="admin">Admin</option>
+                      <option value="user">User</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="toolbar-right">
+                  <button className="btn-secondary">
+                    <Download size={18} />
+                    Export
+                  </button>
+                  <button 
+                    className="btn-primary"
+                    onClick={() => setShowAddModal(true)}
+                  >
+                    <Plus size={18} />
+                    Add User
+                  </button>
+                </div>
+              </div>
+
+              <div className="user-table-card">
+                <div className="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredUsers.map((user, index) => (
+                        <tr key={user._id || index}>
+                          <td className="username">{user.username}</td>
+                          <td>{user.fullname}</td>
+                          <td>{user.email}</td>
+                          <td>
+                            <span className={`role-badge ${user.role.toLowerCase()}`}>
+                              {user.role}
+                            </span>
+                          </td>
+                          <td>
+                            <div className="actions">
+                              <button 
+                                className="icon-btn"
+                                onClick={() => handleEditUser(user)}
+                                title="Edit user"
+                              >
+                                <Edit2 size={16} />
+                              </button>
+                              <button 
+                                className="icon-btn delete"
+                                onClick={() => handleDeleteUser(user._id)}
+                                title="Delete user"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Edit User Modal */}

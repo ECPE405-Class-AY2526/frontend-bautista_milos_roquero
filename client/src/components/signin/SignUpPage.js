@@ -61,7 +61,7 @@ function SignUpPage() {
 
   return (
     <div>
-      <div className="hero">
+      <div className="signup-hero">
         <div className="signup-container">
           <div className="form-header">
             <h1 className="form-title">Create Account</h1>

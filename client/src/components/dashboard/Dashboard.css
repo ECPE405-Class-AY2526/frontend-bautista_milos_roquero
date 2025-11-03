@@ -201,7 +201,8 @@
           background-color: #10b981;
           color: white;
           padding: 8px 16px;     
-          margin: 0;             
+          margin: 0;     
+          text-align: left;        
           line-height: 1.2;
         }
 
@@ -241,6 +242,13 @@
 
         .status-content {
           text-align: center;
+        }
+
+        .status-cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+          gap: 12px;
+          margin-bottom: 24px;
         }
 
         .status-icon {

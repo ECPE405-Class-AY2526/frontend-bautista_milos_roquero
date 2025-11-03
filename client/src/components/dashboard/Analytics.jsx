@@ -56,11 +56,17 @@ export default function Analytics() {
             <Activity size={16} />
             <span>Analytics</span>
           </button>
-          <button className="nav-item">
+          <button 
+            className="nav-item"
+            onClick={() => handleNavigate('/dashboard/history')}
+          >
             <Clock size={16} />
             <span>History</span>
           </button>
-          <button className="nav-item">
+          <button 
+            className="nav-item"
+            onClick={() => handleNavigate('/dashboard/settings')}
+          >
             <Settings size={16} />
             <span>Settings</span>
           </button>
