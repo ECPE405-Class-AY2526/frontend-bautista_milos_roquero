@@ -4,7 +4,8 @@
   "description": "Here's a brief description of the project setup and instructions to run both the client and server, suitable for a `README.md` file.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server run start"
   },
   "repository": {
     "type": "git",
