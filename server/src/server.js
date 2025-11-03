@@ -14,7 +14,9 @@ connectDB();
 
 //Middleware
 const allowedOrigins = [
-  'https://thesis-rice-grain-dryer-monitoring.onrender.com:5000'
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  `http://${process.env.IP_ADDRESS || '0.0.0.0'}:3000`
 ];
 
 app.use(
