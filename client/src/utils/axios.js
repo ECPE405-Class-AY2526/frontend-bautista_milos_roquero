@@ -85,7 +85,7 @@ api.interceptors.response.use(
       // Try alternative URL if it's a network error
       if (error.code === 'ERR_NETWORK') {
         const hostname = window.location.hostname;
-        const alternateURL = `http://${hostname}:5001`;
+        const alternateURL = `https://${hostname}:5001`;
         
         try {
           const originalRequest = error.config;

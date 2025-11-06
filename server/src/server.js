@@ -16,7 +16,7 @@ connectDB();
 const allowedOrigins = [
   'https://thesis-rice-grain-dryer.onrender.com'
 ];
-
+  
 if (process.env.CLIENT_ORIGIN) {
   allowedOrigins.push(process.env.CLIENT_ORIGIN);
 }
