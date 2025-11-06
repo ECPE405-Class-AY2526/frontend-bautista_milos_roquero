@@ -59,6 +59,12 @@ app.use(express.json());
 //Routes
 app.use("/api/auth", authRoutes);
 
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', service: 'rgd-backend' });
+});
+
+app.get('/healthz', (req, res) => res.send('ok'));
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
   // console.log(`Access locally via: http://localhost:${PORT}`);
