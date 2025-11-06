@@ -82,11 +82,9 @@ api.interceptors.response.use(
       return Promise.reject(error);
     } else if (error.request) {
       // The request was made but no response was received
-      // Try alternative URL if it's a network error
-      if (error.code === 'ERR_NETWORK') {
-        const hostname = window.location.hostname;
-        const alternateURL = `https://${hostname}:5001`;
-        
+      // Try alternative URL in development only if it's a network error
+      if (error.code === 'ERR_NETWORK' && process.env.NODE_ENV !== 'production') {
+        const alternateURL = 'http://localhost:5001';
         try {
           const originalRequest = error.config;
           originalRequest.baseURL = alternateURL;

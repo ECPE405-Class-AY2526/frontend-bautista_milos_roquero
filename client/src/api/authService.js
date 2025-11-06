@@ -15,7 +15,7 @@ const handleApiError = (error) => {
 const authService = {
   async getDashboardData() {
     try {
-      const response = await api.get('/api/dashboard');
+      const response = await api.get('/api/auth/dashboard');
       return response.data;
     } catch (error) {
       handleApiError(error);
