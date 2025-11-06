@@ -14,9 +14,12 @@ connectDB();
 
 //Middleware
 const allowedOrigins = [
-  'https://thesis-rice-grain-dryer.onrender.com',
-  `http://${process.env.IP_ADDRESS || '0.0.0.0'}:3000`
+  'https://thesis-rice-grain-dryer.onrender.com'
 ];
+
+if (process.env.CLIENT_ORIGIN) {
+  allowedOrigins.push(process.env.CLIENT_ORIGIN);
+}
 
 app.use(
   cors({
