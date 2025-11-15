@@ -67,14 +67,16 @@ const useAuthStore = create((set, get) => ({
       set({
         token,
         user: userData,
-        user: userData,
         loading: false,
       });
       return true;
     } catch (err) {
       console.error('Register error:', err);
       set({ loading: false });
-      return false;
+      if (err.response?.data?.message) {
+        throw new Error(err.response.data.message);
+      }
+      throw err;
     }
   },
 
@@ -91,11 +93,11 @@ const useAuthStore = create((set, get) => ({
     try {
       const token = await AsyncStorage.getItem('token');
       if (token) {
-        const res = await axios.get('/api/users/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get('/me');
+        const me = res.data;
+        const userData = { _id: me.id || me._id, username: me.username, email: me.email, role: me.role };
         set({
-          user: res.data,
+          user: userData,
           token,
           isInitialized: true,
         });

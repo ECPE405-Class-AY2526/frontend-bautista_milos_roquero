@@ -110,7 +110,7 @@ const DashboardScreen: React.FC = () => {
 
         {/* Sensor Readings */}
         <Text style={styles.sectionTitle}>Sensor Readings</Text>
-
+        <View style={styles.statusGrid}> 
         <View style={styles.card}>
           <Text style={styles.label}>Temperature</Text>
           <Text style={styles.value}>55.6 °C</Text>
@@ -134,6 +134,7 @@ const DashboardScreen: React.FC = () => {
           <Text style={styles.value}>16.4 kg</Text>
           <Text style={styles.sub}>Initial 20 kg</Text>
         </View>
+          </View>
 
         {/* System Controls */}
         <Text style={styles.sectionTitle}>System Controls</Text>
@@ -320,10 +321,12 @@ const styles = StyleSheet.create<Styles>({
     marginVertical: 10,
   },
   card: {
-    backgroundColor: "#f9fafb",
+    width: '48%',
+    backgroundColor: '#f9fafb',
     borderRadius: 12,
-    padding: 15,
+    padding: 12,
     marginVertical: 6,
+    alignItems: 'center',
   },
   label: {
     fontSize: 14,

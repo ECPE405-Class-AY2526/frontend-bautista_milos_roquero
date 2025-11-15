@@ -2,8 +2,13 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // For Android Emulator, use 10.0.2.2 instead of localhost
+const USE_LOCAL = false;
+const BASE_URL = USE_LOCAL
+  ? 'http://10.0.2.2:5001/api/auth'
+  : 'https://rgd-backend.onrender.com/api/auth';
+
 const api = axios.create({
-  baseURL: 'http://10.0.2.2:5001/api/auth',
+  baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -31,15 +36,15 @@ api.interceptors.response.use(
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       console.error('Response error:', error.response.data);
-      throw error.response.data;
+      return Promise.reject(error);
     } else if (error.request) {
       // The request was made but no response was received
       console.error('Request error:', error.request);
-      throw new Error('No response from server');
+      return Promise.reject(new Error('No response from server'));
     } else {
       // Something happened in setting up the request that triggered an Error
       console.error('Error:', error.message);
-      throw error;
+      return Promise.reject(error);
     }
   }
 );

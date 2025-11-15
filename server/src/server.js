@@ -14,7 +14,9 @@ connectDB();
 
 //Middleware
 const allowedOrigins = [
-  'https://thesis-rice-grain-dryer.onrender.com'
+  'https://thesis-rice-grain-dryer.onrender.com',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
 ];
   
 if (process.env.CLIENT_ORIGIN) {
